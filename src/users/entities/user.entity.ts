@@ -1,13 +1,15 @@
 import { Role } from 'src/roles/entities/role.entity';
+import { Ficha } from 'src/ficha/entities/ficha.entity';
 import { 
     Column, 
     Entity, 
     JoinTable, 
     ManyToMany, 
+    ManyToOne,
     PrimaryGeneratedColumn, 
 } from 'typeorm';
 
-@Entity()
+@Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -21,11 +23,20 @@ export class User {
     @Column({ type: 'varchar', length: 255 })
     docType;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 255, unique: true })
     docNumber;
 
     @Column({ unique: true })
     email: string;
+
+    @Column()
+    telephone: string;
+
+    @Column()
+    FamTelephone: string;
+
+    @Column()
+    state: string;
 
     @Column()
     password: string;
@@ -38,4 +49,8 @@ export class User {
         name: 'user_roles'
     })
     roles: Role[];
+
+    @ManyToOne(() => Ficha, ficha => ficha.users)
+    fichas: Ficha[];
+
 }
