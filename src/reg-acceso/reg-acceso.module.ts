@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { RegAccesoController } from './controllers/reg-acceso/reg-acceso.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { RegAccesoService } from './services/reg-acceso/reg-acceso.service';
+import { RegAccesoController } from './controllers/reg-acceso/reg-acceso.controller';
+import { Acceso } from './entities/acceso.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Acceso])],
   controllers: [RegAccesoController],
-  providers: [RegAccesoService]
+  providers: [RegAccesoService],
 })
 export class RegAccesoModule {}

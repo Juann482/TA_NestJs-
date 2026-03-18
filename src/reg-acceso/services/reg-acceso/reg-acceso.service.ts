@@ -6,42 +6,33 @@ import { CreateAccesoDto, UpdateAccesoDto } from '../../dtos/acceso.dto';
 
 @Injectable()
 export class RegAccesoService {
-    constructor(
-        @InjectRepository(Acceso)
-        private accesoRepo: Repository<Acceso>,
-    ) {}
+  constructor(
+    @InjectRepository(Acceso)
+    private accesoRepository: Repository<Acceso>,
+  ) {}
 
-    // Crear
-    async create(dto: CreateAccesoDto) {
-        const acceso = this.accesoRepo.create({
-            usuarioId: dto.usuarioId,
-            observacion: dto.observacion,
-            horaIngreso: new Date()
-        });
-        return await this.accesoRepo.save(acceso);
-    }
+  async create(createAccesoDto: CreateAccesoDto): Promise<Acceso> {
+    const acceso = this.accesoRepository.create({
+      ...createAccesoDto,
+      horaIngreso: new Date(),
+    });
+    return this.accesoRepository.save(acceso);
+  }
 
-    // Obtener todos
-    async findAll() {
-        return await this.accesoRepo.find();
-    }
+  async findAll(): Promise<Acceso[]> {
+    return this.accesoRepository.find();
+  }
 
-    // Obtener uno
-    async findOne(id: number) {
-        return await this.accesoRepo.findOne({ where: { id } });
-    }
+  async findOne(id: number): Promise<Acceso> {
+    return this.accesoRepository.findOneOrFail({ where: { id } });
+}
 
-    // Actualizar (registrar salida)
-    async update(id: number, dto: UpdateAccesoDto) {
-        await this.accesoRepo.update(id, {
-            horaSalida: dto.horaSalida || new Date(),
-            observacion: dto.observacion
-        });
-        return await this.findOne(id);
-    }
+  async update(id: number, updateAccesoDto: UpdateAccesoDto): Promise<Acceso> {
+    await this.accesoRepository.update(id, updateAccesoDto);
+    return this.findOne(id);
+  }
 
-    // Eliminar
-    async remove(id: number) {
-        return await this.accesoRepo.delete(id);
-    }
+  async remove(id: number): Promise<void> {
+    await this.accesoRepository.delete(id);
+  }
 }

@@ -1,33 +1,37 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { RegAccesoService } from '../../services/reg-acceso/reg-acceso.service';
 import { CreateAccesoDto, UpdateAccesoDto } from '../../dtos/acceso.dto';
+import { Acceso } from '../../entities/acceso.entity';
 
-@Controller('accesos')
+@Controller('reg-acceso')
 export class RegAccesoController {
-    constructor(private service: RegAccesoService) {}
+  constructor(private readonly regAccesoService: RegAccesoService) {}
 
-    @Post()
-    create(@Body() dto: CreateAccesoDto) {
-        return this.service.create(dto);
-    }
+  @Post()
+  async create(@Body() createAccesoDto: CreateAccesoDto): Promise<Acceso> {
+    return this.regAccesoService.create(createAccesoDto);
+  }
 
-    @Get()
-    findAll() {
-        return this.service.findAll();
-    }
+  @Get()
+  async findAll(): Promise<Acceso[]> {
+    return this.regAccesoService.findAll();
+  }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.service.findOne(+id);
-    }
+  @Get(':id')
+  async findOne(@Param('id') id: number): Promise<Acceso> {
+    return this.regAccesoService.findOne(id);
+  }
 
-    @Put(':id')
-    update(@Param('id') id: string, @Body() dto: UpdateAccesoDto) {
-        return this.service.update(+id, dto);
-    }
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() updateAccesoDto: UpdateAccesoDto,
+  ): Promise<Acceso> {
+    return this.regAccesoService.update(id, updateAccesoDto);
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.service.remove(+id);
-    }
+  @Delete(':id')
+  async remove(@Param('id') id: number): Promise<void> {
+    return this.regAccesoService.remove(id);
+  }
 }
