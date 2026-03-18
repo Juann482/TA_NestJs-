@@ -1,18 +1,19 @@
-
+import { User } from 'src/users/entities/user.entity';
 import { 
     Column,
     Entity,
-    PrimaryGeneratedColumn
+    OneToMany,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
-export class ficha {
+@Entity('ficha')
+export class Ficha {
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'varchar', length: 10 })
-    numficha: number;
+    numficha: string; 
 
     @Column({ type: 'varchar', length: 100 })
     programa: string;
@@ -26,10 +27,12 @@ export class ficha {
     @Column({ type: 'varchar', length: 20 })
     estado: string;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ type: 'date' })  
     fechaInicio: Date;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ type: 'date' })
     fechafin: Date;
 
+    @OneToMany(() => User, user => user.fichas)
+    users: User[];
 }
