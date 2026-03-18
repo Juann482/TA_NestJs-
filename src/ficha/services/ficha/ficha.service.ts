@@ -22,14 +22,14 @@ export class FichaService {
         throw new BadRequestException(`Ya existe una ficha con el número ${createFichaDto.numFicha}`);
       }
 
-      // Crear instancia y asignar valores
+      // Crear instancia y asignar valores (mapeando fechaFin del DTO a fechafin de la entidad)
       const ficha = new Ficha();
       ficha.numficha = createFichaDto.numFicha;
       ficha.programa = createFichaDto.programa;
       ficha.nivelFormacion = createFichaDto.nivelFormacion;
       ficha.jornada = createFichaDto.jornada;
       ficha.fechaInicio = createFichaDto.fechaInicio;
-      ficha.fechaFin = createFichaDto.fechaFin;
+      ficha.fechafin = createFichaDto.fechaFin; 
       ficha.estado = createFichaDto.estado || 'Activa';
 
       return await this.fichaRepository.save(ficha);
@@ -97,7 +97,7 @@ export class FichaService {
     if (updateFichaDto.nivelFormacion !== undefined) ficha.nivelFormacion = updateFichaDto.nivelFormacion;
     if (updateFichaDto.jornada !== undefined) ficha.jornada = updateFichaDto.jornada;
     if (updateFichaDto.fechaInicio !== undefined) ficha.fechaInicio = updateFichaDto.fechaInicio;
-    if (updateFichaDto.fechaFin !== undefined) ficha.fechaFin = updateFichaDto.fechaFin;
+    if (updateFichaDto.fechaFin !== undefined) ficha.fechafin = updateFichaDto.fechaFin; // ← CORREGIDO: mapeo correcto
     if (updateFichaDto.estado !== undefined) ficha.estado = updateFichaDto.estado;
 
     return await this.fichaRepository.save(ficha);
@@ -138,7 +138,7 @@ export class FichaService {
     return ficha;
   }
 
-  // Método opcional: obtener fichas activas (simplificado)
+  // Método opcional: obtener fichas activas
   async findActivas(): Promise<Ficha[]> {
     return this.fichaRepository.find({
       where: { estado: 'Activa' },

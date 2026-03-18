@@ -1,12 +1,14 @@
-
+import { User } from 'src/users/entities/user.entity';
 import { 
     Column,
     Entity,
-    PrimaryGeneratedColumn
+    OneToMany,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('ficha')
 export class Ficha {
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -29,5 +31,8 @@ export class Ficha {
     fechaInicio: Date;
 
     @Column({ type: 'date' })
-    fechaFin: Date;
+    fechafin: Date;
+
+    @OneToMany(() => User, user => user.fichas)
+    users: User[];
 }
