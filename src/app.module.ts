@@ -11,6 +11,10 @@ import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
 import { ModulesModule } from './modules/modules.module';
+import { FichaModule } from './ficha/ficha.module';
+import { RegAccesoModule } from './reg-acceso/reg-acceso.module';
+import { DispositivosModule } from './dispositivos/dispositivos.module';
+import { VehiculosModule } from './vehiculos/vehiculos.module';
 import config from './config';
 
 @Module({
@@ -35,6 +39,10 @@ import config from './config';
     RolesModule,
     PermissionsModule,
     ModulesModule,
+    FichaModule,
+    RegAccesoModule,
+    DispositivosModule,
+    VehiculosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
