@@ -8,5 +8,6 @@ import { Acceso } from './entities/acceso.entity';
   imports: [TypeOrmModule.forFeature([Acceso])],
   controllers: [RegAccesoController],
   providers: [RegAccesoService],
+  exports: [TypeOrmModule],
 })
 export class RegAccesoModule {}

@@ -1,5 +1,4 @@
 export class CreateAccesoDto {
-  usuarioId: number;
   observacion?: string;
 }
 

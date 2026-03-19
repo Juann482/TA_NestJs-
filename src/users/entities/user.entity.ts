@@ -12,6 +12,7 @@ import {
     OneToMany,
     PrimaryGeneratedColumn, 
 } from 'typeorm';
+import { Acceso } from 'src/reg-acceso/entities/acceso.entity';
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
@@ -59,7 +60,12 @@ export class User {
     @OneToMany(() => Dispositivo, dispositivo => dispositivo.usuario)
     dispositivos: Dispositivo[];
 
+    @OneToMany(() => Acceso, acceso => acceso.usuario)
+    accesos: Acceso [];
+
+
     @OneToMany(() => Vehiculo, vehiculo => vehiculo.usuario)
     vehiculos: Vehiculo[];
+
 
 }
