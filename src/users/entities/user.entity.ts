@@ -1,5 +1,5 @@
 import { Role } from 'src/roles/entities/role.entity';
-
+import { Vehiculo } from 'src/vehiculos/entities/vehiculo.entity';
 import { Ficha } from 'src/ficha/entities/ficha.entity';
 import { Dispositivo } from '../../dispositivos/entities/dispositivo.entity';
 
@@ -57,5 +57,9 @@ export class User {
     fichas: Ficha[];
 
     @OneToMany(() => Dispositivo, dispositivo => dispositivo.usuario)
-dispositivos: Dispositivo[];
+    dispositivos: Dispositivo[];
+
+    @OneToMany(() => Vehiculo, vehiculo => vehiculo.usuario)
+    vehiculos: Vehiculo[];
+
 }
