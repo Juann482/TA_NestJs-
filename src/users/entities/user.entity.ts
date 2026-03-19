@@ -1,14 +1,17 @@
 import { Role } from 'src/roles/entities/role.entity';
+
 import { Ficha } from 'src/ficha/entities/ficha.entity';
+import { Dispositivo } from '../../dispositivos/entities/dispositivo.entity';
+
 import { 
     Column, 
     Entity, 
     JoinTable, 
     ManyToMany, 
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn, 
 } from 'typeorm';
-
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
@@ -53,4 +56,6 @@ export class User {
     @ManyToOne(() => Ficha, ficha => ficha.users)
     fichas: Ficha[];
 
+    @OneToMany(() => Dispositivo, dispositivo => dispositivo.usuario)
+dispositivos: Dispositivo[];
 }
