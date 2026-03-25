@@ -1,6 +1,6 @@
-import { Role } from 'src/roles/entities/role.entity';
-import { Vehiculo } from 'src/vehiculos/entities/vehiculo.entity';
-import { Ficha } from 'src/ficha/entities/ficha.entity';
+import { Role } from '../../roles/entities/role.entity';
+import { Vehiculo } from '../../vehiculos/entities/vehiculo.entity';
+import { Ficha } from '../../ficha/entities/ficha.entity';
 import { Dispositivo } from '../../dispositivos/entities/dispositivo.entity';
 
 import { 
