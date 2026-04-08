@@ -8,8 +8,8 @@ import { UsersService } from '../../../users/services/users/users.service';
 import { JwtAuthGuard } from '../../../auth/guards/auth.guard';
 
 @ApiBearerAuth()
-@Modules('users')//solo los usuarios con autenticacion con users pueden acceder a este endpoint
-@UseGuards(JwtAuthGuard, ModulesGuard)  //protegen el modulo
+@Modules('users')
+@UseGuards(JwtAuthGuard, ModulesGuard) 
 @Controller('users')
 export class UsersController {
 

@@ -34,6 +34,21 @@ export class CreateUserDto {
     @ApiProperty()
     readonly password: string;
 
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty()
+    readonly telephone: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty()
+    readonly FamTelephone: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty()
+    readonly state: string;
+
     @IsBoolean()
     @IsNotEmpty()
     @ApiProperty()
