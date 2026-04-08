@@ -22,8 +22,7 @@ import { JwtAuthGuard } from './guards/auth.guard';
       }),
     }),
   ],
-  // providers: [AuthService, JwtStrategy],
-  providers: [AuthService, ModulesGuard, JwtAuthGuard, JwtStrategy], // 🔹 AuthService incluido
+  providers: [AuthService, ModulesGuard, JwtAuthGuard, JwtStrategy], 
   controllers: [AuthController],
   exports: [AuthService, ModulesGuard, JwtAuthGuard],
 })

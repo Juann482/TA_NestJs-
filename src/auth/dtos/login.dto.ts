@@ -13,8 +13,8 @@ export class LoginDto {
     @ApiProperty()
     readonly password: string;
 
-    @IsBoolean()
-    @IsNotEmpty()
-    @ApiProperty()
-    readonly isActive: boolean;
+    //@IsBoolean()
+    //@IsNotEmpty()
+    //@ApiProperty()
+    //readonly isActive: boolean;
 }

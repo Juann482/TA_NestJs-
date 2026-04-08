@@ -2,70 +2,66 @@ import { Role } from 'src/roles/entities/role.entity';
 import { Vehiculo } from 'src/vehiculos/entities/vehiculo.entity';
 import { Ficha } from 'src/ficha/entities/ficha.entity';
 import { Dispositivo } from '../../dispositivos/entities/dispositivo.entity';
+import { Acceso } from 'src/reg-acceso/entities/acceso.entity'; // Asegúrate que esta ruta sea correcta
 
-import { 
-    Column, 
-    Entity, 
-    JoinTable, 
-    ManyToMany, 
+import {
+    Column,
+    Entity,
+    JoinTable,
+    ManyToMany,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn, 
+    PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Acceso } from 'src/reg-acceso/entities/acceso.entity';
+
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({ type: 'varchar', length: 255 })
-    name;
+    name!: string;
 
     @Column({ type: 'varchar', length: 255 })
-    lastName;
+    lastName!: string;
 
     @Column({ type: 'varchar', length: 255 })
-    docType;
+    docType!: string;
 
     @Column({ type: 'varchar', length: 255, unique: true })
-    docNumber;
+    docNumber!: string;
 
     @Column({ unique: true })
-    email: string;
+    email!: string;
+
+    @Column({ nullable: true })
+    telephone!: string;
+
+    @Column({ nullable: true })
+    FamTelephone!: string;
+
+    @Column({ default: 'activo' })
+    state!: string;
 
     @Column()
-    telephone: string;
-
-    @Column()
-    FamTelephone: string;
-
-    @Column()
-    state: string;
-
-    @Column()
-    password: string;
+    password!: string;
 
     @Column({ default: true })
-    isActive: boolean;
+    isActive!: boolean;
 
     @ManyToMany(() => Role, role => role.users)
-    @JoinTable({
-        name: 'user_roles'
-    })
-    roles: Role[];
+    @JoinTable({ name: 'user_roles' })
+    roles!: Role[];
 
-    @ManyToOne(() => Ficha, ficha => ficha.users)
-    fichas: Ficha[];
+    @ManyToOne(() => Ficha, (ficha) => ficha.users, { nullable: true })
+    fichas!: Ficha;
 
-    @OneToMany(() => Dispositivo, dispositivo => dispositivo.usuario)
-    dispositivos: Dispositivo[];
+    @OneToMany(() => Dispositivo, (dispositivo) => dispositivo.usuario)
+    dispositivos!: Dispositivo[];
 
-    @OneToMany(() => Acceso, acceso => acceso.usuario)
-    accesos: Acceso [];
+    @OneToMany(() => Acceso, (acceso) => acceso.usuario)
+    accesos!: Acceso[];
 
-
-    @OneToMany(() => Vehiculo, vehiculo => vehiculo.usuario)
-    vehiculos: Vehiculo[];
-
-
+    @OneToMany(() => Vehiculo, (vehiculo) => vehiculo.usuario)
+    vehiculos!: Vehiculo[];
 }

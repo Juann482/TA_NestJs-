@@ -8,8 +8,6 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-
-    users: User[] = [];
     constructor(
         @InjectRepository(User) private userRepo: Repository<User>,
         private rolesService: RolesService,
@@ -19,25 +17,15 @@ export class UsersService {
         return await this.userRepo.find({ relations: ['roles'] });
     }
 
-    // async findByEmail(email: string) {
-    //     const user = await this.userRepo.findOne({ where: { email: email } });
-    //     if (!user) {
-    //         throw new NotFoundException(`User ${email} not found`);
-    //     }
-    //     return user;
-    // }
-
-
-
+    // Mantenemos solo esta versión de findByEmail (la más completa)
     async findByEmail(email: string) {
         const user = await this.userRepo.findOne({
             where: { email },
             relations: {
                 roles: {
-                    modules: true,
+                    modules: true, // Esto es genial para el login
                 },
             },
-            // relations: ['roles'], //clave
         });
 
         if (!user) {
@@ -57,14 +45,11 @@ export class UsersService {
         return user;
     }
 
-    // createUser(payload: CreateUserDto){
-    //     const newUser = this.userRepo.create(payload);
-    //     return this.userRepo.save(newUser);
-    // }
-
     async create(createUserDto: CreateUserDto) {
         const { roleIds, password, ...userData } = createUserDto;
         const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Buscamos los roles para asociarlos al nuevo usuario
         const roles = await this.rolesService.findByIds(roleIds);
 
         if (roles.length !== roleIds.length) {
@@ -73,7 +58,7 @@ export class UsersService {
 
         const newUser = this.userRepo.create({
             ...userData,
-            password: hashedPassword, //Guardamos la encriptada
+            password: hashedPassword,
             roles,
         });
         return this.userRepo.save(newUser);
@@ -89,37 +74,27 @@ export class UsersService {
 
         if (!user) throw new NotFoundException('User not found');
 
-        // actualizar roles
         if (roleIds) {
             const roles = await this.rolesService.findByIds(roleIds);
-
             if (roles.length !== roleIds.length) {
                 throw new NotFoundException('Some roles were not found');
             }
-
             user.roles = roles;
         }
 
-        // actualizar password solo si viene
         if (password) {
             user.password = await bcrypt.hash(password, 10);
         }
 
-        // actualizar resto de datos
         this.userRepo.merge(user, userData);
-
         return this.userRepo.save(user);
     }
 
-    // async updateUser(id: number, payloadUpdated: UpdateUserDto) {
-    //     const user = await this.userRepo.findOne({ where: { id } });
-    //     if (!user) {
-    //         throw new NotFoundException(`User #${id} not found`);
-    //     }
-    //     this.userRepo.merge(user, payloadUpdated);
-    // }
-
-    deleteUser(idUser: number) {
-        return this.userRepo.delete(idUser);
+    async deleteUser(idUser: number) {
+        const result = await this.userRepo.delete(idUser);
+        if (result.affected === 0) {
+            throw new NotFoundException(`User #${idUser} not found`);
+        }
+        return { message: 'User deleted successfully' };
     }
 }

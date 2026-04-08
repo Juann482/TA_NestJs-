@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsInt, IsBoolean } from "class-validator";
+import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsInt, IsBoolean, IsOptional } from "class-validator"; // Agregado IsOptional
 import { PartialType, ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
@@ -39,6 +39,22 @@ export class CreateUserDto {
     @ApiProperty()
     readonly isActive: boolean;
 
+    // --- NUEVOS CAMPOS AGREGADOS ---
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ required: false })
+    readonly telephone?: string;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ required: false })
+    readonly FamTelephone?: string;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ required: false, default: 'activo' })
+    readonly state?: string;
+
     @IsArray()
     @ArrayNotEmpty()
     @IsInt({ each: true })
@@ -46,6 +62,5 @@ export class CreateUserDto {
     @ApiProperty({ type: [Number] })
     readonly roleIds: number[];
 }
-export class UpdateUserDto extends PartialType(CreateUserDto) { }
 
-//Ddddddddddddddddddddddddddddddddddddddddddddddddddddd
+export class UpdateUserDto extends PartialType(CreateUserDto) { }

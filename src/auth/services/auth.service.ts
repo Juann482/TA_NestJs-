@@ -11,16 +11,18 @@ export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
-        // @InjectRepository(User) private userRepo: Repository<User>
+        // Eliminamos el Repository si no se usa directamente aquí
     ) { }
 
     async validateUser(email: string, password: string) {
-        const user: User = await this.usersService.findByEmail(email);
+        // Buscamos al usuario incluyendo sus roles para el login
+        const user = await this.usersService.findByEmail(email);
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new UnauthorizedException('Invalid credentials');
+            throw new UnauthorizedException('Credenciales inválidas');
         }
 
+        // Extraemos el password para no enviarlo al frontend
         const { password: _, ...result } = user;
         return result;
     }
@@ -29,7 +31,8 @@ export class AuthService {
         const payload = {
             sub: user.id,
             email: user.email,
-            // roles: user.roles.map(r => r.name),
+            // Importante: Asegúrate de que user.roles exista en el objeto user
+            roles: user.roles ? user.roles.map(r => r.name) : [],
         };
 
         return {
@@ -37,12 +40,4 @@ export class AuthService {
             user,
         };
     }
-
-    // async login(user: UserModel) {
-    //     const payload = { sub: user.id, email: user.email };
-    //     return {
-    //         access_token: this.jwtService.sign(payload),
-    //     };
-    // }
-
 }
