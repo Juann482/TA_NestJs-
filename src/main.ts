@@ -6,10 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-<<<<<<< HEAD
-  app.enableCors();
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
-=======
+
 
   // ✅ Prefijo global para todas las rutas: http://localhost:3000/api/...
   app.setGlobalPrefix('api');
@@ -30,9 +27,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  // ✅ Swagger / Documentación
->>>>>>> a3cf2d9e118cdf11e8fadb7cbb96c770bc94bf34
   const config = new DocumentBuilder()
     .setTitle('API')
     .setDescription('The haptica API description')

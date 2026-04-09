@@ -2,7 +2,7 @@ import { Role } from '../../roles/entities/role.entity';
 import { Vehiculo } from '../../vehiculos/entities/vehiculo.entity';
 import { Ficha } from '../../ficha/entities/ficha.entity';
 import { Dispositivo } from '../../dispositivos/entities/dispositivo.entity';
-import { Acceso } from 'src/reg-acceso/entities/acceso.entity'; // Asegúrate que esta ruta sea correcta
+import { Acceso } from '../../reg-acceso/entities/acceso.entity'; // Asegúrate que esta ruta sea correcta
 
 import {
     Column,
@@ -17,51 +17,51 @@ import {
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
-    id!: number;
+    id: number;
 
     @Column({ type: 'varchar', length: 255 })
-    name!: string;
+    name: string;
 
     @Column({ type: 'varchar', length: 255 })
-    lastName!: string;
+    lastName: string;
 
     @Column({ type: 'varchar', length: 255 })
-    docType!: string;
+    docType: string;
 
     @Column({ type: 'varchar', length: 255, unique: true })
-    docNumber!: string;
+    docNumber: string;
 
     @Column({ unique: true })
-    email!: string;
+    email: string;
 
     @Column({ nullable: true })
-    telephone!: string;
+    telephone: string;
 
     @Column({ nullable: true })
-    FamTelephone!: string;
+    FamTelephone: string;
 
     @Column({ default: 'activo' })
-    state!: string;
+    state: string;
 
     @Column()
-    password!: string;
+    password: string;
 
     @Column({ default: true })
-    isActive!: boolean;
+    isActive: boolean;
 
     @ManyToMany(() => Role, role => role.users)
     @JoinTable({ name: 'user_roles' })
-    roles!: Role[];
+    roles: Role[];
 
     @ManyToOne(() => Ficha, (ficha) => ficha.users, { nullable: true })
-    fichas!: Ficha;
+    fichas: Ficha;
 
     @OneToMany(() => Dispositivo, (dispositivo) => dispositivo.usuario)
-    dispositivos!: Dispositivo[];
+    dispositivos: Dispositivo[];
 
     @OneToMany(() => Acceso, (acceso) => acceso.usuario)
-    accesos!: Acceso[];
+    accesos: Acceso[];
 
     @OneToMany(() => Vehiculo, (vehiculo) => vehiculo.usuario)
-    vehiculos!: Vehiculo[];
+    vehiculos: Vehiculo[];
 }

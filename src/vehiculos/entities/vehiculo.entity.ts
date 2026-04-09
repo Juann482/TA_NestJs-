@@ -1,4 +1,4 @@
-import { User } from '../../users/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import { 
   Column,
   Entity,
@@ -23,6 +23,9 @@ export class Vehiculo {
 
   @Column({ type: 'varchar', length: 50 })
   color: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  modelo: string;
 
   // Muchos vehículos pertenecen a un usuario
   @ManyToOne(() => User, user => user.vehiculos, { onDelete: 'CASCADE' })
