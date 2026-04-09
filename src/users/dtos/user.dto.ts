@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsInt, IsBoolean, IsOptional } from "class-validator"; // Agregado IsOptional
+import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsInt, IsBoolean, IsOptional, IsEmail } from "class-validator";
 import { PartialType, ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
@@ -24,7 +24,7 @@ export class CreateUserDto {
     @ApiProperty()
     readonly docNumber: string;
 
-    @IsString()
+    @IsEmail() // Mejor usar IsEmail para validar el formato
     @IsNotEmpty()
     @ApiProperty()
     readonly email: string;
@@ -34,27 +34,12 @@ export class CreateUserDto {
     @ApiProperty()
     readonly password: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    readonly telephone: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    readonly FamTelephone: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    readonly state: string;
-
     @IsBoolean()
     @IsNotEmpty()
     @ApiProperty()
     readonly isActive: boolean;
 
-    // --- NUEVOS CAMPOS AGREGADOS ---
+    
     @IsOptional()
     @IsString()
     @ApiProperty({ required: false })
