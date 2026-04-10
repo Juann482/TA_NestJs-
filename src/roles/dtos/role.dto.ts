@@ -7,12 +7,12 @@ export class CreateRoleDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    readonly name: string;
+    readonly name!: string;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    readonly description: string;
+    readonly description!: string;
 
     @ApiProperty({
         example: [1, 2, 3],
@@ -20,6 +20,6 @@ export class CreateRoleDto {
     })
     @IsArray()
     @IsNumber({}, { each: true })
-    moduleIds: number[];
+    moduleIds!: number[];
 }
 export class UpdateRoleDto extends PartialType(CreateRoleDto) { }
