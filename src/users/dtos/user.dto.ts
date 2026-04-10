@@ -54,22 +54,6 @@ export class CreateUserDto {
     @ApiProperty()
     readonly isActive: boolean;
 
-    // --- NUEVOS CAMPOS AGREGADOS ---
-    @IsOptional()
-    @IsString()
-    @ApiProperty({ required: false })
-    readonly telephone?: string;
-
-    @IsOptional()
-    @IsString()
-    @ApiProperty({ required: false })
-    readonly FamTelephone?: string;
-
-    @IsOptional()
-    @IsString()
-    @ApiProperty({ required: false, default: 'activo' })
-    readonly state?: string;
-
     @IsArray()
     @ArrayNotEmpty()
     @IsInt({ each: true })
