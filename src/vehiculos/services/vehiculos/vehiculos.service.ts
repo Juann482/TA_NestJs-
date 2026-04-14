@@ -87,37 +87,37 @@ export class VehiculosService {
     return vehiculos;
     }
 
-    async create(dto: CreateVehiculoDto, user: User) {
-
-        const { usuarioId, ...VehiculoData} = dto;
+    async create(dto: CreateVehiculoDto, user?: User) {
+        const { usuarioId, ...VehiculoData } = dto;
 
         const existe = await this.vehiRepo.findOne({
-        where: { placa: dto.placa }
-    });
+            where: { placa: dto.placa }
+        });
 
-    //if (user.role !== 'admin') {
-  //throw new ForbiddenException('No autorizado');
-//}
+        if (existe) {
+            throw new BadRequestException('La placa ya está registrada');
+        }
 
-    if (existe) {
-        throw new BadRequestException('La placa ya está registrada'); //BadRequestException para elementos ya existentes
+        let usuario: User | null | undefined = user;
+        
+        // Si no se pasó el objeto usuario o el ID no coincide, lo buscamos
+        if (!usuario || usuario.id !== usuarioId) {
+            usuario = await this.userRepo.findOne({
+                where: { id: usuarioId }
+            });
+        }
+
+        if (!usuario) {
+            throw new NotFoundException('Usuario no encontrado');
+        }
+
+        const vehiculo = this.vehiRepo.create({
+            ...VehiculoData,
+            usuario
+        });
+
+        return await this.vehiRepo.save(vehiculo);
     }
-
-    const usuario = await this.userRepo.findOne({
-        where : {id: usuarioId}
-    })
-
-    if (!usuario) {
-        throw new NotFoundException('Usuario no encontrado');
-    }
-
-    const vehiculo = this.vehiRepo.create({
-        ...VehiculoData,
-        usuario
-    });
-
-    return this.vehiRepo.save(vehiculo);
-}
 async updateVehiculo(id: number, updateVehiculo: UpdateVehiculoDto){
 
     const { placa, tipoVehiculo, marca, ...vehiculoData} = updateVehiculo;

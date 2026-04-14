@@ -87,4 +87,11 @@ export class FichaController {
   ) {
     return this.fichaService.remove(id, soft);
   }
+
+  @Get(':id/aprendices')
+  @ApiOperation({ summary: 'Obtener aprendices de una ficha específica' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID de la ficha' })
+  getAprendices(@Param('id', ParseIntPipe) id: number) {
+    return this.fichaService.findAprendices(id);
+  }
 }

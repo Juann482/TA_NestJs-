@@ -8,7 +8,7 @@ export class FichaDto {
         example: '123456',
         description: 'Número de ficha',
     })
-    numFicha: string;
+    numficha: string;
 
     @IsString()
     @IsNotEmpty()
@@ -48,7 +48,7 @@ export class FichaDto {
         example: '2025-02-01',
         description: 'Fecha de finalización de la ficha ',
     })
-    fechaFin: Date;
+    fechafin: Date;
 
     @IsString()
     @IsOptional()

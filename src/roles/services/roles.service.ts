@@ -15,7 +15,7 @@ export class RolesService {
 
     async create(createRoleDto: CreateRoleDto) {
         const { moduleIds, ...rolesData } = createRoleDto;
-        const modules = await this.modulesService.findByIds(moduleIds);
+        const modules = (moduleIds && moduleIds.length > 0) ? await this.modulesService.findByIds(moduleIds) : [];
 
         const existingRole = await this.roleRepo.findOne({
             where: { name: createRoleDto.name },
@@ -40,7 +40,9 @@ export class RolesService {
 
 
     async findOne(id: number) {
-        const role = await this.roleRepo.findOne({ where: { id } });
+        const role = await this.roleRepo.findOne({ 
+            where: { id }
+        });
         if (!role) {
             throw new NotFoundException(`Role #${id} not found`);
         }
@@ -49,7 +51,7 @@ export class RolesService {
 
     async findByIds(roleIds: number[]) {
         const roles = await this.roleRepo.find({
-            where: { id: In(roleIds) },
+            where: { id: In(roleIds) }
         });
         return roles;
     }

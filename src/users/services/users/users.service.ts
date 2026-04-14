@@ -1,9 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
+import { Ficha } from 'src/ficha/entities/ficha.entity';
 import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/user.dto';
 import { RolesService } from 'src/roles/services/roles.service';
+import { FichaService } from 'src/ficha/services/ficha/ficha.service';
+import { VehiculosService } from 'src/vehiculos/services/vehiculos/vehiculos.service';
+import { Vehiculo } from 'src/vehiculos/entities/vehiculo.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -11,19 +15,21 @@ export class UsersService {
     constructor(
         @InjectRepository(User) private userRepo: Repository<User>,
         private rolesService: RolesService,
+        private fichaService: FichaService,
+        private vehiculosService: VehiculosService,
+        private dataSource: DataSource,
     ) { }
 
     async findAll() {
-        return await this.userRepo.find({ relations: ['roles'] });
+        return await this.userRepo.find({ relations: ['roles', 'fichas'] });
     }
 
-    // Mantenemos solo esta versión de findByEmail (la más completa)
     async findByEmail(email: string) {
         const user = await this.userRepo.findOne({
             where: { email },
             relations: {
                 roles: {
-                    modules: true, // Esto es genial para el login
+                    modules: true,
                 },
             },
         });
@@ -46,30 +52,79 @@ export class UsersService {
     }
 
     async create(createUserDto: CreateUserDto) {
-        const { roleIds, password, ...userData } = createUserDto;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        
-        // Buscamos los roles para asociarlos al nuevo usuario
-        const roles = await this.rolesService.findByIds(roleIds);
+        const { roleIds, password, fichasId, ...userData } = createUserDto;
 
+        let hashedPassword: string | null = null;
+        if (password) {
+            hashedPassword = await bcrypt.hash(password, 10);
+        }
+
+        const roles = await this.rolesService.findByIds(roleIds);
         if (roles.length !== roleIds.length) {
             throw new NotFoundException('Some roles were not found');
         }
 
-        const newUser = this.userRepo.create({
-            ...userData,
-            password: hashedPassword,
-            roles,
-        });
-        return this.userRepo.save(newUser);
+        let fichas: Ficha | null = null;
+        if (fichasId) {
+            fichas = await this.fichaService.findOne(fichasId);
+        }
+
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            // 1. Crear Usuario
+            const newUser = queryRunner.manager.create(User, {
+                ...userData,
+                password: hashedPassword,
+                roles,
+                fichas,
+            });
+            const savedUser = await queryRunner.manager.save(newUser);
+
+            // 2. Crear Vehículo si aplica
+            if (userData.placa) {
+                // Verificamos si la placa ya existe antes de proceder
+                const plateExists = await queryRunner.manager.findOne(Vehiculo, { 
+                    where: { placa: userData.placa } 
+                });
+                
+                if (plateExists) {
+                    throw new BadRequestException('La placa ya está registrada en el sistema');
+                }
+
+                const newVehiculo = queryRunner.manager.create(Vehiculo, {
+                    placa: userData.placa,
+                    marca: userData.marca,
+                    modelo: userData.modelo,
+                    color: userData.color,
+                    tipoVehiculo: userData.tipoVehiculo,
+                    usuario: savedUser, // Asignación directa del objeto
+                });
+                await queryRunner.manager.save(newVehiculo);
+            }
+
+            await queryRunner.commitTransaction();
+            return savedUser;
+
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            if (error.code === '23505' || error.message?.includes('unique constraint')) {
+                throw new ConflictException('El correo o la placa ya se encuentran registrados');
+            }
+            throw error;
+        } finally {
+            await queryRunner.release();
+        }
     }
 
     async updateUser(id: number, updateUserDto: UpdateUserDto) {
-        const { roleIds, password, ...userData } = updateUserDto;
+        const { roleIds, password, fichasId, ...userData } = updateUserDto;
 
         const user = await this.userRepo.findOne({
             where: { id },
-            relations: ['roles'],
+            relations: ['roles', 'fichas'],
         });
 
         if (!user) throw new NotFoundException('User not found');
@@ -82,12 +137,27 @@ export class UsersService {
             user.roles = roles;
         }
 
+        if (fichasId !== undefined) {
+          if (fichasId === null) {
+            user.fichas = null;
+          } else {
+            user.fichas = await this.fichaService.findOne(fichasId);
+          }
+        }
+
         if (password) {
             user.password = await bcrypt.hash(password, 10);
         }
 
         this.userRepo.merge(user, userData);
-        return this.userRepo.save(user);
+        try {
+            return await this.userRepo.save(user);
+        } catch (error) {
+            if (error.code === '23505') {
+                throw new ConflictException('El correo electrónico ya se encuentra registrado');
+            }
+            throw error;
+        }
     }
 
     async deleteUser(idUser: number) {

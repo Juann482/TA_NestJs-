@@ -18,7 +18,7 @@ export class AuthService {
         // Buscamos al usuario incluyendo sus roles para el login
         const user = await this.usersService.findByEmail(email);
 
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Credenciales inválidas');
         }
 

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsInt, IsNumber } from "class-validator";
+import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty, IsInt, IsNumber, IsOptional } from "class-validator";
 import { PartialType, ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
@@ -16,10 +16,12 @@ export class CreateRoleDto {
 
     @ApiProperty({
         example: [1, 2, 3],
-        description: 'IDs de los módulos asignados al rol'
+        description: 'IDs de los módulos asignados al rol',
+        required: false
     })
     @IsArray()
+    @IsOptional()
     @IsNumber({}, { each: true })
-    moduleIds!: number[];
+    moduleIds?: number[];
 }
 export class UpdateRoleDto extends PartialType(CreateRoleDto) { }

@@ -7,6 +7,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // ✅ Set global prefix
+  app.setGlobalPrefix('api');
+
   // ✅ Configurar CORS para permitir conexión desde Angular (puerto 4200)
   app.enableCors({
     origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],

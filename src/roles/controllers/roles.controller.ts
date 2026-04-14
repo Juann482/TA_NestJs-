@@ -23,7 +23,8 @@ import { ModulesGuard } from '../../auth/guards/modules.guard.guard';
 
 @ApiBearerAuth()
 @Modules('roles')
-@UseGuards(JwtAuthGuard, ModulesGuard)
+@UseGuards(JwtAuthGuard) // Temporalmente sin ModulesGuard para permitir configuración inicial
+// @UseGuards(JwtAuthGuard, ModulesGuard)
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {

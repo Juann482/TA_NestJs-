@@ -16,20 +16,20 @@ export class FichaService {
     try {
       // Verificar si ya existe una ficha con el mismo número
       const existingFicha = await this.fichaRepository.findOne({
-        where: { numficha: createFichaDto.numFicha },
+        where: { numficha: createFichaDto.numficha },
       });
       if (existingFicha) {
-        throw new BadRequestException(`Ya existe una ficha con el número ${createFichaDto.numFicha}`);
+        throw new BadRequestException(`Ya existe una ficha con el número ${createFichaDto.numficha}`);
       }
 
       // Crear instancia y asignar valores (mapeando fechaFin del DTO a fechafin de la entidad)
       const ficha = new Ficha();
-      ficha.numficha = createFichaDto.numFicha;
+      ficha.numficha = createFichaDto.numficha;
       ficha.programa = createFichaDto.programa;
       ficha.nivelFormacion = createFichaDto.nivelFormacion;
       ficha.jornada = createFichaDto.jornada;
       ficha.fechaInicio = createFichaDto.fechaInicio;
-      ficha.fechafin = createFichaDto.fechaFin; 
+      ficha.fechafin = createFichaDto.fechafin; 
       ficha.estado = createFichaDto.estado || 'Activa';
 
       return await this.fichaRepository.save(ficha);
@@ -82,14 +82,14 @@ export class FichaService {
     const ficha = await this.findOne(id);
 
     // Si se intenta cambiar el número de ficha, verificar que no exista otro con ese número
-    if (updateFichaDto.numFicha && updateFichaDto.numFicha !== ficha.numficha) {
+    if (updateFichaDto.numficha && updateFichaDto.numficha !== ficha.numficha) {
       const existingFicha = await this.fichaRepository.findOne({
-        where: { numficha: updateFichaDto.numFicha },
+        where: { numficha: updateFichaDto.numficha },
       });
       if (existingFicha) {
-        throw new BadRequestException(`Ya existe una ficha con el número ${updateFichaDto.numFicha}`);
+        throw new BadRequestException(`Ya existe una ficha con el número ${updateFichaDto.numficha}`);
       }
-      ficha.numficha = updateFichaDto.numFicha;
+      ficha.numficha = updateFichaDto.numficha;
     }
 
     // Actualizar el resto de campos si vienen en el DTO
@@ -97,7 +97,7 @@ export class FichaService {
     if (updateFichaDto.nivelFormacion !== undefined) ficha.nivelFormacion = updateFichaDto.nivelFormacion;
     if (updateFichaDto.jornada !== undefined) ficha.jornada = updateFichaDto.jornada;
     if (updateFichaDto.fechaInicio !== undefined) ficha.fechaInicio = updateFichaDto.fechaInicio;
-    if (updateFichaDto.fechaFin !== undefined) ficha.fechafin = updateFichaDto.fechaFin; // ← CORREGIDO: mapeo correcto
+    if (updateFichaDto.fechafin !== undefined) ficha.fechafin = updateFichaDto.fechafin;
     if (updateFichaDto.estado !== undefined) ficha.estado = updateFichaDto.estado;
 
     return await this.fichaRepository.save(ficha);
@@ -144,5 +144,22 @@ export class FichaService {
       where: { estado: 'Activa' },
       order: { id: 'DESC' },
     });
+  }
+
+  // Obtener los aprendices vinculados a una ficha
+  async findAprendices(id: number): Promise<any[]> {
+    const ficha = await this.fichaRepository.findOne({
+      where: { id },
+      relations: ['users', 'users.roles'],
+    });
+
+    if (!ficha) {
+      throw new NotFoundException(`Ficha con ID ${id} no encontrada`);
+    }
+
+    // Retorna solo los usuarios que tienen el rol 'Aprendiz'
+    return ficha.users.filter(user => 
+      user.roles.some(role => role.name.toUpperCase() === 'APRENDIZ')
+    );
   }
 }

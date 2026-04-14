@@ -43,8 +43,8 @@ export class User {
     @Column({ default: 'activo' })
     state: string;
 
-    @Column()
-    password: string;
+    @Column({ type: 'varchar', nullable: true })
+    password: string | null;
 
     @Column({ default: true })
     isActive: boolean;
@@ -54,7 +54,7 @@ export class User {
     roles: Role[];
 
     @ManyToOne(() => Ficha, (ficha) => ficha.users, { nullable: true })
-    fichas: Ficha;
+    fichas: Ficha | null;
 
     @OneToMany(() => Dispositivo, (dispositivo) => dispositivo.usuario)
     dispositivos: Dispositivo[];
