@@ -11,12 +11,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // ✅ Configurar CORS para permitir conexión desde Angular (puerto 4200)
-  app.enableCors({
-    origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+  app.enableCors();
 
   // ✅ Pipes globales de validación
   app.useGlobalPipes(

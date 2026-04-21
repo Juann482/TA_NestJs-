@@ -32,12 +32,28 @@ export class AuthService {
             sub: user.id,
             email: user.email,
             // Importante: Asegúrate de que user.roles exista en el objeto user
-            roles: user.roles ? user.roles.map(r => r.name) : [],
+            // roles: user.roles ? user.roles.map(r => r.name) : [],
         };
 
         return {
             access_token: this.jwtService.sign(payload),
             user,
+        };
+    }
+
+    async checkStatus(user: UserModel) {
+
+        const id = user.id; // 'sub' es el campo que usamos para el ID del usuario en el payload
+        const dbUser = await this.usersService.findOne(id);
+        // Usamos 'sub' para que la estrategia pueda encontrarlo después
+        const payload = {
+            sub: dbUser.id,
+            email: dbUser.email
+        };
+
+        return {
+            user: dbUser,
+            access_token: this.jwtService.sign(payload), // Generamos el token con 'sub'
         };
     }
 
