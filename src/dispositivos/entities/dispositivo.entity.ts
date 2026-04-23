@@ -10,18 +10,18 @@ import {
 export class Dispositivo {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'varchar', length: 255 })
-  tipoDispositivo: string;
+  tipoDispositivo!: string;
 
   @Column({ type: 'varchar', length: 255 })
-  marca: string;
+  marca!: string;
 
   @Column({ type: 'varchar', length: 100 })
-  color: string;
+  color!: string;
 
   // Muchos dispositivos pertenecen a un usuario
   @ManyToOne(() => User, user => user.dispositivos, { onDelete: 'CASCADE' })
-  usuario: User;
+  usuario! : User;
 }

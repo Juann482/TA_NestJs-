@@ -3,9 +3,10 @@ import { DispositivosService } from './services/dispositivos/dispositivos.servic
 import { DispositivosController } from './controllers/dispositivos/dispositivos.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Dispositivo } from './entities/dispositivo.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Dispositivo])],
+  imports: [TypeOrmModule.forFeature([Dispositivo, User])],
   providers: [DispositivosService],
   controllers: [DispositivosController],
   exports: [DispositivosService]
