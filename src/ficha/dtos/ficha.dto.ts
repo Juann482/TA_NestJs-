@@ -8,7 +8,7 @@ export class FichaDto {
         example: '123456',
         description: 'Número de ficha',
     })
-    numficha: string;
+    numficha!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -16,7 +16,7 @@ export class FichaDto {
         example: 'ADSO',
         description: 'Programa de formación',
     })
-    programa: string;
+    programa!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -24,7 +24,7 @@ export class FichaDto {
         example: 'Tecnólogo',
         description: 'Nivel de formación  (Operario, Técnico, Tecnólogo)',
     })
-    nivelFormacion: string;
+    nivelFormacion!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -32,7 +32,7 @@ export class FichaDto {
         example: 'Diurna',
         description: 'Jornada de estudio (Mañana, Tarde, Noche)',
     })
-    jornada: string;
+    jornada!: string;
 
     @IsDateString()
     @IsNotEmpty()
@@ -40,7 +40,7 @@ export class FichaDto {
         example: '2024-02-01',
         description: 'Fecha de inicio de la ficha ',
     })
-    fechaInicio: Date;
+    fechaInicio!: Date;
 
     @IsDateString()
     @IsNotEmpty()
@@ -48,7 +48,7 @@ export class FichaDto {
         example: '2025-02-01',
         description: 'Fecha de finalización de la ficha ',
     })
-    fechafin: Date;
+    fechafin!: Date;
 
     @IsString()
     @IsOptional()

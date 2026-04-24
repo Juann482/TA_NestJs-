@@ -7,32 +7,32 @@ export class CreateVehiculoDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ example: 'ABC123' })//para mejor validacion, quitar si es necesario
-    readonly placa: string;
+    readonly placa!: string;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    readonly  tipoVehiculo: string;
+    readonly  tipoVehiculo!: string;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    readonly marca: string;
+    readonly marca!: string;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    readonly color: string;
+    readonly color!: string;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    readonly modelo: string;
+    readonly modelo!: string;
 
     @IsInt({ each: true })
     @Type(() => Number)
     @ApiProperty()
-    readonly usuarioId: number;
+    readonly usuarioId!: number;
 
 }
 export class UpdateVehiculoDto extends PartialType(CreateVehiculoDto) { }

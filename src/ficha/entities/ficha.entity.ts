@@ -10,29 +10,29 @@ import {
 export class Ficha {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({ type: 'varchar', length: 10 })
-    numficha: string; 
+    numficha!: string; 
 
     @Column({ type: 'varchar', length: 100 })
-    programa: string;
+    programa!: string;
 
     @Column({ type: 'varchar', length: 20 })
-    nivelFormacion: string;
+    nivelFormacion!: string;
 
     @Column({ type: 'varchar', length: 20 })
-    jornada: string;
+    jornada!: string;
 
     @Column({ type: 'varchar', length: 20 })
-    estado: string;
+    estado!: string;
 
     @Column({ type: 'date' })  
-    fechaInicio: Date;
+    fechaInicio!: Date;
 
     @Column({ type: 'date' })
-    fechafin: Date;
+    fechafin!: Date;
 
     @OneToMany(() => User, user => user.fichas)
-    users: User[];
+    users!: User[];
 }
