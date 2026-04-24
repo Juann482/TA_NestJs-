@@ -17,51 +17,51 @@ import {
 @Entity('user')
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({ type: 'varchar', length: 255 })
-    name: string;
+    name!: string;
 
     @Column({ type: 'varchar', length: 255 })
-    lastName: string;
+    lastName!: string;
 
     @Column({ type: 'varchar', length: 255 })
-    docType: string;
+    docType!: string;
 
     @Column({ type: 'varchar', length: 255, unique: true })
-    docNumber: string;
+    docNumber!: string;
 
     @Column({ unique: true })
-    email: string;
+    email!: string;
 
     @Column({ nullable: true })
-    telephone: string;
+    telephone!: string;
 
     @Column({ nullable: true })
-    FamTelephone: string;
+    FamTelephone!: string;
 
     @Column({ default: 'activo' })
-    state: string;
+    state!: string;
 
     @Column({ type: 'varchar', nullable: true })
-    password: string | null;
+    password!: string | null;
 
     @Column({ default: true })
-    isActive: boolean;
+    isActive!: boolean;
 
     @ManyToMany(() => Role, role => role.users)
     @JoinTable({ name: 'user_roles' })
-    roles: Role[];
+    roles!: Role[];
 
     @ManyToOne(() => Ficha, (ficha) => ficha.users, { nullable: true })
-    fichas: Ficha | null;
+    fichas!: Ficha | null;
 
     @OneToMany(() => Dispositivo, (dispositivo) => dispositivo.usuario)
-    dispositivos: Dispositivo[];
+    dispositivos!: Dispositivo[];
 
     @OneToMany(() => Acceso, (acceso) => acceso.usuario)
-    accesos: Acceso[];
+    accesos!: Acceso[];
 
     @OneToMany(() => Vehiculo, (vehiculo) => vehiculo.usuario)
-    vehiculos: Vehiculo[];
+    vehiculos!: Vehiculo[];
 }

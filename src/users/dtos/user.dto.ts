@@ -59,6 +59,7 @@ export class CreateUserDto {
     @IsInt({ each: true })
     @Type(() => Number)
     @ApiProperty({ type: [Number] })
+
     readonly roleIds!: number[];
 
     @IsOptional()

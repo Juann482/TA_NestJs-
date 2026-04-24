@@ -4,21 +4,21 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'ty
 @Entity('accesos')
 export class Acceso {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  horaIngreso: Date;
+  horaIngreso!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  horaSalida: Date;
+  horaSalida!: Date;
 
   @Column({ type: 'date', default: () => 'CURRENT_DATE' }) 
-  fecha: Date;
+  fecha!: Date;
 
   @Column({ nullable: true })
-  observacion: string;
+  observacion!: string;
 
    @ManyToOne(() => User, (user) => user.accesos, { onDelete: 'CASCADE' })
-  usuario: User;
+  usuario!: User;
 
 }

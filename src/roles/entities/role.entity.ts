@@ -11,7 +11,7 @@ import {
 @Entity()
 export class Role {
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column({ type: 'varchar', length: 255, unique: true })
     name;
@@ -20,7 +20,7 @@ export class Role {
     description;
 
     @ManyToMany(() => User, user => user.roles)
-    users: User[];
+    users!: User[];
 
     @ManyToMany(() => ModuleEntity, { eager: true })
     @JoinTable({
@@ -28,5 +28,5 @@ export class Role {
         joinColumn: { name: 'role_id', referencedColumnName: 'id' },
         inverseJoinColumn: { name: 'module_id', referencedColumnName: 'id' }
     })
-    modules: ModuleEntity[];
+    modules!: ModuleEntity[];
 }

@@ -5,14 +5,14 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 export class ModuleEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @ManyToMany(() => Role, role => role.modules)
-  roles: Role[];
+  roles!: Role[];
 }

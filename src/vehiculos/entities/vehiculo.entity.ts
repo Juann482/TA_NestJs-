@@ -10,24 +10,24 @@ import {
 export class Vehiculo {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'varchar', length: 20, unique: true })
-  placa: string;
+  placa!: string;
 
   @Column({ type: 'varchar', length: 100 })
-  tipoVehiculo: string;
+  tipoVehiculo!: string;
 
   @Column({ type: 'varchar', length: 100 })
-  marca: string;
+  marca!: string;
 
   @Column({ type: 'varchar', length: 50 })
-  color: string;
+  color!: string;
 
   @Column({ type: 'varchar', length: 100 })
-  modelo: string;
+  modelo!: string;
 
   // Muchos vehículos pertenecen a un usuario
   @ManyToOne(() => User, user => user.vehiculos, { onDelete: 'CASCADE' })
-  usuario: User;
+  usuario!: User;
 }
