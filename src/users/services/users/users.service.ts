@@ -6,8 +6,6 @@ import { Ficha } from 'src/ficha/entities/ficha.entity';
 import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/user.dto';
 import { RolesService } from 'src/roles/services/roles.service';
 import { FichaService } from 'src/ficha/services/ficha/ficha.service';
-import { VehiculosService } from 'src/vehiculos/services/vehiculos/vehiculos.service';
-import { Vehiculo } from 'src/vehiculos/entities/vehiculo.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -16,7 +14,6 @@ export class UsersService {
         @InjectRepository(User) private userRepo: Repository<User>,
         private rolesService: RolesService,
         private fichaService: FichaService,
-        private vehiculosService: VehiculosService,
         private dataSource: DataSource,
     ) { }
 
@@ -83,27 +80,7 @@ export class UsersService {
             });
             const savedUser = await queryRunner.manager.save(newUser);
 
-            // 2. Crear Vehículo si aplica
-            if (userData.placa) {
-                // Verificamos si la placa ya existe antes de proceder
-                const plateExists = await queryRunner.manager.findOne(Vehiculo, { 
-                    where: { placa: userData.placa } 
-                });
-                
-                if (plateExists) {
-                    throw new BadRequestException('La placa ya está registrada en el sistema');
-                }
-
-                const newVehiculo = queryRunner.manager.create(Vehiculo, {
-                    placa: userData.placa,
-                    marca: userData.marca,
-                    modelo: userData.modelo,
-                    color: userData.color,
-                    tipoVehiculo: userData.tipoVehiculo,
-                    usuario: savedUser, // Asignación directa del objeto
-                });
-                await queryRunner.manager.save(newVehiculo);
-            }
+            
 
             await queryRunner.commitTransaction();
             return savedUser;
